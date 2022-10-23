@@ -99,6 +99,7 @@ fun ConverterRow(convertType: ConvertType) {
                 ) {
                     Column {
                         CustomDropdownMenu(
+                            selectedIndex = inputDropdownIndex,
                             items = dropdownItems
                         ) {
                             inputDropdownIndex = it
@@ -113,6 +114,7 @@ fun ConverterRow(convertType: ConvertType) {
                     }
                     Column {
                         CustomDropdownMenu(
+                            selectedIndex = resultDropdownIndex,
                             items = dropdownItems.filterIndexed { index, _ -> index != inputDropdownIndex }
                         ) {
                             resultDropdownIndex = it

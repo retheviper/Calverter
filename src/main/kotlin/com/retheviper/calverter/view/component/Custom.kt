@@ -39,13 +39,13 @@ fun ConvertResult(value: String) {
 
 @Composable
 fun CustomDropdownMenu(
+    selectedIndex: Int,
     items: List<String>,
     onClick: (Int) -> Unit
 ) {
-    var inputDropdownIndex by remember { mutableStateOf(0) }
     var expanded by remember { mutableStateOf(false) }
     Text(
-        text = items[inputDropdownIndex],
+        text = items[selectedIndex],
         modifier = Modifier.clickable { expanded = true }.height(24.dp).width(IntrinsicSize.Min),
     )
     DropdownMenu(
@@ -55,7 +55,6 @@ fun CustomDropdownMenu(
         items.forEachIndexed { index, value ->
             DropdownMenuItem(
                 onClick = {
-                    inputDropdownIndex = index
                     onClick(index)
                     expanded = false
                 },
