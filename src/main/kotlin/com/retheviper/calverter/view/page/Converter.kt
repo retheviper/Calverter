@@ -44,11 +44,10 @@ fun ConverterRow(convertType: ConvertType) {
         var inputDropdownIndex by remember { mutableStateOf(0) }
         var resultDropdownIndex by remember { mutableStateOf(0) }
 
-        val (dropdownItems, resultAtDropdownSelect, title) = getRowContent(
+        val (dropdownItems, resultAtDropdownSelect) = getRowContent(
             convertType,
             inputDropdownIndex,
-            resultDropdownIndex,
-            input
+            resultDropdownIndex
         )
 
         Row(
@@ -60,7 +59,7 @@ fun ConverterRow(convertType: ConvertType) {
                     .width(IntrinsicSize.Max)
                     .padding(start = 20.dp, top = 10.dp, bottom = 10.dp)
             ) {
-                Text(title)
+                Text(convertType.toString())
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
@@ -70,13 +69,13 @@ fun ConverterRow(convertType: ConvertType) {
                             items = dropdownItems
                         ) {
                             inputDropdownIndex = it
-                            result = resultAtDropdownSelect()
+                            result = resultAtDropdownSelect(input)
                         }
                         ConvertInput(
                             value = input
                         ) {
                             input = it
-                            result = resultAtDropdownSelect()
+                            result = resultAtDropdownSelect(input)
                         }
                     }
                     Spacer(modifier = Modifier.width(10.dp))
@@ -98,48 +97,44 @@ fun ConverterRow(convertType: ConvertType) {
 private fun getRowContent(
     convertType: ConvertType,
     inputDropdownIndex: Int,
-    resultDropdownIndex: Int,
-    input: String
+    resultDropdownIndex: Int
 ) = when (convertType) {
     ConvertType.AREA -> {
-        Triple(
+        Pair(
             first = Area.items,
-            second = {
+            second = { input: String ->
                 Converter.convert(
                     from = Area.values()[inputDropdownIndex],
                     to = Area.fromValue(Area.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
                     input = input
                 )
-            },
-            third = "Area"
+            }
         )
     }
 
     ConvertType.LENGTH -> {
-        Triple(
+        Pair(
             first = Length.items,
-            second = {
+            second = { input: String ->
                 Converter.convert(
                     from = Length.values()[inputDropdownIndex],
                     to = Length.fromValue(Length.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
                     input = input
                 )
-            },
-            third = "Length"
+            }
         )
     }
 
     ConvertType.VOLUME -> {
-        Triple(
+        Pair(
             first = Volume.items,
-            second = {
+            second = { input: String ->
                 Converter.convert(
                     from = Volume.values()[inputDropdownIndex],
                     to = Volume.fromValue(Volume.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
                     input = input
                 )
-            },
-            third = "Volume"
+            }
         )
     }
 }
