@@ -1,6 +1,9 @@
 package com.retheviper.calverter.common.constant
 
-enum class Area(val value: String) {
+
+interface Units
+
+enum class Area(val value: String) : Units {
     PYOUNG("坪"),
     SQUARE_METER("㎡");
 
@@ -11,7 +14,7 @@ enum class Area(val value: String) {
     }
 }
 
-enum class Length(val value: String) {
+enum class Length(val value: String) : Units {
     METER("m"),
     KILOMETER("km"),
     MILE("mi");
@@ -23,9 +26,9 @@ enum class Length(val value: String) {
     }
 }
 
-enum class Volume(val value: String) {
+enum class Volume(val value: String) : Units {
     LITER("ℓ"),
-    CUBICMETER("㎥");
+    CUBIC_METER("㎥");
 
     companion object {
         private val map = values().associateBy(Volume::value)

@@ -13,16 +13,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.retheviper.calverter.common.constant.Area
 import com.retheviper.calverter.common.constant.ConvertType
 import com.retheviper.calverter.common.constant.Length
 import com.retheviper.calverter.common.constant.Volume
-import com.retheviper.calverter.convert.AreaConverter
-import com.retheviper.calverter.convert.LengthConverter
-import com.retheviper.calverter.convert.VolumeConverter
+import com.retheviper.calverter.convert.Converter
 import com.retheviper.calverter.view.component.ConvertInput
 import com.retheviper.calverter.view.component.ConvertResult
 import com.retheviper.calverter.view.component.CustomDropdownMenu
@@ -49,7 +46,7 @@ fun ConverterRow(convertType: ConvertType) {
                 Triple(
                     first = Area.items,
                     second = {
-                        AreaConverter.convert(
+                        Converter.convert(
                             from = Area.values()[inputDropdownIndex],
                             to = Area.fromValue(Area.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
                             input = input
@@ -58,11 +55,12 @@ fun ConverterRow(convertType: ConvertType) {
                     third = "Area"
                 )
             }
+
             ConvertType.LENGTH -> {
                 Triple(
                     first = Length.items,
                     second = {
-                        LengthConverter.convert(
+                        Converter.convert(
                             from = Length.values()[inputDropdownIndex],
                             to = Length.fromValue(Length.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
                             input = input
@@ -71,13 +69,14 @@ fun ConverterRow(convertType: ConvertType) {
                     third = "Length"
                 )
             }
+
             ConvertType.VOLUME -> {
                 Triple(
                     first = Volume.items,
                     second = {
-                        VolumeConverter.convert(
+                        Converter.convert(
                             from = Volume.values()[inputDropdownIndex],
-                            to = Volume.fromValue(Area.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
+                            to = Volume.fromValue(Volume.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
                             input = input
                         )
                     },
@@ -100,27 +99,24 @@ fun ConverterRow(convertType: ConvertType) {
                 ) {
                     Column {
                         CustomDropdownMenu(
-                            index = inputDropdownIndex,
-                            items = dropdownItems,
-                            onClick = {
-                                inputDropdownIndex = it
-                                result = resultAtDropdownSelect()
-                            }
-                        )
+                            items = dropdownItems
+                        ) {
+                            inputDropdownIndex = it
+                            result = resultAtDropdownSelect()
+                        }
                         ConvertInput(
-                            value = input,
-                            onValueChange = {
-                                input = it
-                                result = resultAtDropdownSelect()
-                            }
-                        )
+                            value = input
+                        ) {
+                            input = it
+                            result = resultAtDropdownSelect()
+                        }
                     }
                     Column {
                         CustomDropdownMenu(
-                            index = resultDropdownIndex,
-                            items = dropdownItems.filterIndexed { index, _ -> index != inputDropdownIndex },
-                            onClick = { resultDropdownIndex = it }
-                        )
+                            items = dropdownItems.filterIndexed { index, _ -> index != inputDropdownIndex }
+                        ) {
+                            resultDropdownIndex = it
+                        }
                         ConvertResult(result)
                     }
                 }

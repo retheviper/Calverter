@@ -3,8 +3,8 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.10"
-    id("org.jetbrains.compose") version "1.0.1"
+    kotlin("jvm") version "1.7.10"
+    id("org.jetbrains.compose") version "1.2.0"
 }
 
 group = "com.retheviper.calverter"
@@ -29,7 +29,7 @@ compose.desktop {
         mainClass = "MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "untitled"
+            packageName = "Calverter"
             packageVersion = "1.0.0"
         }
     }

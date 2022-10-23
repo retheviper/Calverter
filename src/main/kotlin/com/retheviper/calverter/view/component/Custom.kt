@@ -2,6 +2,7 @@ package com.retheviper.calverter.view.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -13,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun ConvertInput(value: String, onValueChange: (String) -> Unit) {
@@ -37,14 +39,14 @@ fun ConvertResult(value: String) {
 
 @Composable
 fun CustomDropdownMenu(
-    index: Int,
     items: List<String>,
     onClick: (Int) -> Unit
 ) {
+    var inputDropdownIndex by remember { mutableStateOf(0) }
     var expanded by remember { mutableStateOf(false) }
     Text(
-        text = items[index],
-        modifier = Modifier.clickable { expanded = true },
+        text = items[inputDropdownIndex],
+        modifier = Modifier.clickable { expanded = true }.height(24.dp).width(IntrinsicSize.Min),
     )
     DropdownMenu(
         expanded = expanded,
@@ -53,6 +55,7 @@ fun CustomDropdownMenu(
         items.forEachIndexed { index, value ->
             DropdownMenuItem(
                 onClick = {
+                    inputDropdownIndex = index
                     onClick(index)
                     expanded = false
                 },
