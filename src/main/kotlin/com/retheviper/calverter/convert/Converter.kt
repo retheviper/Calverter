@@ -10,7 +10,7 @@ import java.math.RoundingMode
 
 object Converter {
 
-    const val CANNOT_CONVERT = "Cannot convert"
+    private const val CANNOT_CONVERT = "Cannot convert"
 
     fun convert(
         from: Units,
@@ -27,7 +27,7 @@ object Converter {
             from is Length && to is Length -> convertLength(from, to, value, round, roundingMode)
             from is Volume && to is Volume -> convertVolume(from, to, value, round, roundingMode)
             else -> throw IllegalArgumentException(CANNOT_CONVERT)
-        }
+        }.toPlainString()
     }
 
     private fun convertArea(
@@ -36,12 +36,12 @@ object Converter {
         value: BigDecimal,
         round: Int,
         roundingMode: RoundingMode
-    ): String {
+    ): BigDecimal {
         return when (from to to) {
             Area.PYOUNG to Area.SQUARE_METER -> value.timesWith(BigDecimal(3.305785), round, roundingMode)
             Area.SQUARE_METER to Area.PYOUNG -> value.timesWith(BigDecimal(0.3025), round, roundingMode)
             else -> BigDecimal.ZERO
-        }.toPlainString()
+        }
     }
 
     private fun convertLength(
@@ -50,7 +50,7 @@ object Converter {
         value: BigDecimal,
         round: Int,
         roundingMode: RoundingMode
-    ): String {
+    ): BigDecimal {
         return when (from to to) {
             Length.METER to Length.KILOMETER -> value.timesWith(BigDecimal(0.001), round, roundingMode)
             Length.METER to Length.MILE -> value.timesWith(BigDecimal(0.001609344), round, roundingMode)
@@ -59,7 +59,7 @@ object Converter {
             Length.KILOMETER to Length.METER -> value.timesWith(BigDecimal(1000), round, roundingMode)
             Length.KILOMETER to Length.MILE -> value.timesWith(BigDecimal(0.6214), round, roundingMode)
             else -> BigDecimal.ZERO
-        }.toPlainString()
+        }
     }
 
     private fun convertVolume(
@@ -68,12 +68,12 @@ object Converter {
         value: BigDecimal,
         round: Int,
         roundingMode: RoundingMode
-    ): String {
+    ): BigDecimal {
         return when (from to to) {
             Volume.LITER to Volume.CUBIC_METER -> value.timesWith(BigDecimal(0.001), round, roundingMode)
             Volume.CUBIC_METER to Volume.LITER -> value.timesWith(BigDecimal(1000), round, roundingMode)
             else -> BigDecimal.ZERO
-        }.toPlainString()
+        }
     }
 
     private fun BigDecimal.timesWith(other: BigDecimal, round: Int, roundingMode: RoundingMode): BigDecimal =

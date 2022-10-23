@@ -4,7 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -41,49 +44,12 @@ fun ConverterRow(convertType: ConvertType) {
         var inputDropdownIndex by remember { mutableStateOf(0) }
         var resultDropdownIndex by remember { mutableStateOf(0) }
 
-        val (dropdownItems, resultAtDropdownSelect, title) = when (convertType) {
-            ConvertType.AREA -> {
-                Triple(
-                    first = Area.items,
-                    second = {
-                        Converter.convert(
-                            from = Area.values()[inputDropdownIndex],
-                            to = Area.fromValue(Area.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
-                            input = input
-                        )
-                    },
-                    third = "Area"
-                )
-            }
-
-            ConvertType.LENGTH -> {
-                Triple(
-                    first = Length.items,
-                    second = {
-                        Converter.convert(
-                            from = Length.values()[inputDropdownIndex],
-                            to = Length.fromValue(Length.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
-                            input = input
-                        )
-                    },
-                    third = "Length"
-                )
-            }
-
-            ConvertType.VOLUME -> {
-                Triple(
-                    first = Volume.items,
-                    second = {
-                        Converter.convert(
-                            from = Volume.values()[inputDropdownIndex],
-                            to = Volume.fromValue(Volume.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
-                            input = input
-                        )
-                    },
-                    third = "Volume"
-                )
-            }
-        }
+        val (dropdownItems, resultAtDropdownSelect, title) = getRowContent(
+            convertType,
+            inputDropdownIndex,
+            resultDropdownIndex,
+            input
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -92,6 +58,7 @@ fun ConverterRow(convertType: ConvertType) {
             Column(
                 modifier = Modifier
                     .width(IntrinsicSize.Max)
+                    .padding(start = 20.dp, top = 10.dp, bottom = 10.dp)
             ) {
                 Text(title)
                 Row(
@@ -112,6 +79,7 @@ fun ConverterRow(convertType: ConvertType) {
                             result = resultAtDropdownSelect()
                         }
                     }
+                    Spacer(modifier = Modifier.width(10.dp))
                     Column {
                         CustomDropdownMenu(
                             selectedIndex = resultDropdownIndex,
@@ -124,5 +92,54 @@ fun ConverterRow(convertType: ConvertType) {
                 }
             }
         }
+    }
+}
+
+private fun getRowContent(
+    convertType: ConvertType,
+    inputDropdownIndex: Int,
+    resultDropdownIndex: Int,
+    input: String
+) = when (convertType) {
+    ConvertType.AREA -> {
+        Triple(
+            first = Area.items,
+            second = {
+                Converter.convert(
+                    from = Area.values()[inputDropdownIndex],
+                    to = Area.fromValue(Area.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
+                    input = input
+                )
+            },
+            third = "Area"
+        )
+    }
+
+    ConvertType.LENGTH -> {
+        Triple(
+            first = Length.items,
+            second = {
+                Converter.convert(
+                    from = Length.values()[inputDropdownIndex],
+                    to = Length.fromValue(Length.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
+                    input = input
+                )
+            },
+            third = "Length"
+        )
+    }
+
+    ConvertType.VOLUME -> {
+        Triple(
+            first = Volume.items,
+            second = {
+                Converter.convert(
+                    from = Volume.values()[inputDropdownIndex],
+                    to = Volume.fromValue(Volume.items.filterIndexed { index, _ -> index != inputDropdownIndex }[resultDropdownIndex]),
+                    input = input
+                )
+            },
+            third = "Volume"
+        )
     }
 }
